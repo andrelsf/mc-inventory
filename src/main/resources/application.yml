@@ -1,2 +1,47 @@
-{
-    }
+quarkus:
+  profile: ${QUARKUS_PROFILE:dev}
+  application:
+    name: ${QUARKUS_APP_NAME:mcinventory}
+  shutdown:
+    timeout: 5
+  banner:
+    enabled: false
+  http:
+    port: ${QUARKUS_HTTP_PORT:8092}
+  datasource:
+    db-kind: ${QUARKUS_DATASOURCE_KIND:postgresql}
+    jdbc:
+      url: ${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://10.200.0.202:5432/mcinventory}
+    username: ${QUARKUS_DATASOURCE_USERNAME:mcinventory}
+    password: ${QUARKUS_DATASOURCE_PASSWORD:mcinventory}
+  hibernate-orm:
+    database:
+      generation: none
+  liquibase:
+    migrate-at-start: true
+    change-log: "liquibase/changelog.yml"
+  log:
+    console:
+      enable: true
+      level: DEBUG
+      format: "%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n"
+
+kafka:
+  bootstrap:
+    servers: localhost:9092
+mp:
+  messaging:
+    incoming:
+      # Configuring the incoming channel (reading from Kafka)
+      sec-inventory:
+        connector: smallrye-kafka
+        topic: sec-inventory
+        value:
+          deserializer: br.dev.multicode.utils.deserializers.OrderMessageDeserializer
+    outgoing:
+      # Configuring the outgoing channel (writing to Kafka)
+      sec-replay:
+        connector: smallrye-kafka
+        topic: sec-replay
+        value:
+          serializer: io.quarkus.kafka.client.serialization.JsonbSerializer
