@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: V001
+      labels: "table_inventory"
+      author: "andre.dev.linux@gmail.com"
+      comment: "Create table inventory and index"
+      changes:
+        - tagDatabase:
+            tag: 1.0.0
+        - createTable:
+            tableName: inventory
+            columns:
+              - column:
+                  name: product_id
+                  type: VARCHAR(37)
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: NUMERIC(6,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_inventory
+            tableName: inventory
+            columns:
+              - column:
+                  name: product_id
