@@ -10,6 +10,12 @@ import javax.transaction.Transactional;
 public class ReservedStockRepository implements PanacheRepository<ReservedStock> {
 
   @Transactional
+  public void save(final ReservedStock reservedStock)
+  {
+    this.persistAndFlush(reservedStock);
+  }
+
+  @Transactional
   public void save(final Set<ReservedStock> reservedStocks)
   {
     this.persist(reservedStocks);
