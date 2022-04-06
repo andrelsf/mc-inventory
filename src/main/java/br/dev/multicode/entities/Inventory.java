@@ -32,9 +32,14 @@ public class Inventory {
   private BigDecimal price;
 
   @CreationTimestamp
+  @Column(name = "created_at", nullable = false)
   private ZonedDateTime createdAt;
 
   @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
   private ZonedDateTime updatedAt;
 
+  public void withdraw(Integer amount) {
+    this.quantity -= amount;
+  }
 }
