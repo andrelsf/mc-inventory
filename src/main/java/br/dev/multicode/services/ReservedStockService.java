@@ -1,9 +1,9 @@
 package br.dev.multicode.services;
 
-import br.dev.multicode.models.OrderMessage;
+import br.dev.multicode.entities.ReservedStock;
 
 public interface ReservedStockService {
 
-  void create(OrderMessage orderMessage);
+  void create(ReservedStock reservedStock);
 
 }
