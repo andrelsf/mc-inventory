@@ -43,9 +43,11 @@ public class ReservedStock {
   private Integer reservedQuantity;
 
   @CreationTimestamp
+  @Column(name = "created_at", nullable = false)
   private ZonedDateTime createdAt;
 
   @UpdateTimestamp
+  @Column(name = "updated_at", nullable = false)
   private ZonedDateTime updatedAt;
 
   public static Set<ReservedStock> of(OrderMessage orderMessage) {
