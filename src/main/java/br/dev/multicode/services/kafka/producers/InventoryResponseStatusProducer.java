@@ -12,7 +12,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
-public class InventoryProducer {
+public class InventoryResponseStatusProducer {
 
   private final Logger log = Logger.getLogger(this.getClass());
 
