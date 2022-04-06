@@ -23,10 +23,10 @@ public class InventoryProducer {
   public void doNotification(OrderProcessingStatus orderInventoryStatus)
   {
     Uni.createFrom()
-        .item(orderInventoryStatus)
-        .emitOn(Infrastructure.getDefaultWorkerPool())
-        .subscribe()
-        .with(this::sendToKafka, Throwable::new);
+      .item(orderInventoryStatus)
+      .emitOn(Infrastructure.getDefaultWorkerPool())
+      .subscribe()
+      .with(this::sendToKafka, Throwable::new);
   }
 
   private Uni<Void> sendToKafka(final OrderProcessingStatus orderInventoryStatus)
@@ -34,16 +34,15 @@ public class InventoryProducer {
     log.infof("Start of send message to Kafka topic sec-response-status");
 
     emitter.send(Message.of(orderInventoryStatus)
-        .withAck(() -> {
-          log.infof("Message sent successfully. eventId=%s", orderInventoryStatus.getEventId());
-          return CompletableFuture.completedFuture(null);
-        })
-        .withNack(throwable -> {
-          log.errorf("Message sent failed. ERROR: %s", throwable.getMessage());
-          return CompletableFuture.completedFuture(null);
-        }));
+      .withAck(() -> {
+        log.infof("Message sent successfully. eventId=%s", orderInventoryStatus.getEventId());
+        return CompletableFuture.completedFuture(null);
+      })
+      .withNack(throwable -> {
+        log.errorf("Message sent failed. ERROR: %s", throwable.getMessage());
+        return CompletableFuture.completedFuture(null);
+      }));
 
     return Uni.createFrom().voidItem();
   }
-
 }
