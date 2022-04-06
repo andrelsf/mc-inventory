@@ -9,7 +9,7 @@ import br.dev.multicode.models.OrderProcessingStatus;
 import br.dev.multicode.repositories.InventoryRepository;
 import br.dev.multicode.services.InventoryService;
 import br.dev.multicode.services.ReservedStockService;
-import br.dev.multicode.services.kafka.producers.InventoryProducer;
+import br.dev.multicode.services.kafka.producers.InventoryResponseStatusProducer;
 import java.util.HashSet;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
@@ -19,7 +19,8 @@ import javax.ws.rs.NotFoundException;
 @ApplicationScoped
 public class InventoryServiceImpl implements InventoryService {
 
-  @Inject InventoryProducer inventoryProducer;
+  @Inject
+  InventoryResponseStatusProducer inventoryProducer;
   @Inject InventoryRepository inventoryRepository;
   @Inject ReservedStockService reservedStockService;
 
