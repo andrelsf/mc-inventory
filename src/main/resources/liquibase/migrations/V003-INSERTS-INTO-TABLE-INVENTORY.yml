@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: V003
+      labels: "inserts_inventory"
+      author: "andre.dev.linux@gmail.com"
+      comment: "Inserts into table inventory"
+      changes:
+        - insert:
+            catalogName: inventory
+            columns:
+              - column:
+                  name: product_id
+                  value: "6b31c3f4-2587-4789-bce9-ea4071f37ceb"
+              - column:
+                  name: quantity
+                  value: 10
+              - column:
+                  name: price
+                  value: 59.9
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: inventory
+        - insert:
+            catalogName: inventory
+            columns:
+              - column:
+                  name: product_id
+                  value: "3085eaa9-408e-4e12-8b23-9614e480dd0d"
+              - column:
+                  name: quantity
+                  value: 10
+              - column:
+                  name: price
+                  value: 99.9
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: inventory
+        - insert:
+            catalogName: inventory
+            columns:
+              - column:
+                  name: product_id
+                  value: "cfe5d7d4-6c62-47ed-9c59-212d75d91f58"
+              - column:
+                  name: quantity
+                  value: 10
+              - column:
+                  name: price
+                  value: 59.9
+            dbms: 'postgresql'
+            schemaName: public
+            tableName: inventory

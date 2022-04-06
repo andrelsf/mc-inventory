@@ -3,3 +3,5 @@ databaseChangeLog:
       file: liquibase/migrations/V001-CREATE-TABLE-INVENTORY.yml
   - include:
       file: liquibase/migrations/V002-CREATE-TABLE-RESERVED-STOCK.yml
+  - include:
+      file: liquibase/migrations/V003-INSERTS-INTO-TABLE-INVENTORY.yml
