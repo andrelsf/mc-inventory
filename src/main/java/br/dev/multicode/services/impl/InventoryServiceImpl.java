@@ -19,10 +19,9 @@ import javax.ws.rs.NotFoundException;
 @ApplicationScoped
 public class InventoryServiceImpl implements InventoryService {
 
-  @Inject
-  InventoryResponseStatusProducer inventoryProducer;
   @Inject InventoryRepository inventoryRepository;
   @Inject ReservedStockService reservedStockService;
+  @Inject InventoryResponseStatusProducer inventoryProducer;
 
   @Override
   public void processOrder(OrderMessage orderMessage) {
