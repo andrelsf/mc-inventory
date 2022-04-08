@@ -1,8 +1,8 @@
 package br.dev.multicode.services.kafka.producers;
 
 import br.dev.multicode.models.OrderProcessingStatus;
+import br.dev.multicode.services.kafka.ProducerService;
 import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import java.util.concurrent.CompletableFuture;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.jboss.logging.Logger;
 
 @ApplicationScoped
-public class InventoryResponseStatusProducer {
+public class InventoryResponseStatusProducer implements ProducerService {
 
   private final Logger log = Logger.getLogger(this.getClass());
 
@@ -20,22 +20,14 @@ public class InventoryResponseStatusProducer {
   @Channel("sec-response-status")
   Emitter<OrderProcessingStatus> emitter;
 
-  public void doNotification(OrderProcessingStatus orderInventoryStatus)
-  {
-    Uni.createFrom()
-      .item(orderInventoryStatus)
-      .emitOn(Infrastructure.getDefaultWorkerPool())
-      .subscribe()
-      .with(this::sendToKafka, Throwable::new);
-  }
-
-  private Uni<Void> sendToKafka(final OrderProcessingStatus orderInventoryStatus)
+  @Override
+  public <T> Uni<Void> sendToKafka(T message)
   {
     log.infof("Start of send message to Kafka topic sec-response-status");
 
-    emitter.send(Message.of(orderInventoryStatus)
+    emitter.send(Message.of((OrderProcessingStatus) message)
       .withAck(() -> {
-        log.infof("Message sent successfully. eventId=%s", orderInventoryStatus.getEventId());
+        log.infof("Message sent successfully.");
         return CompletableFuture.completedFuture(null);
       })
       .withNack(throwable -> {

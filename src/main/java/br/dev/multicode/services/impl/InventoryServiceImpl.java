@@ -8,6 +8,7 @@ import br.dev.multicode.models.OrderMessage;
 import br.dev.multicode.models.OrderProcessingStatus;
 import br.dev.multicode.repositories.InventoryRepository;
 import br.dev.multicode.services.InventoryService;
+import br.dev.multicode.services.NotificationService;
 import br.dev.multicode.services.ReservedStockService;
 import br.dev.multicode.services.kafka.producers.InventoryResponseStatusProducer;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import javax.ws.rs.NotFoundException;
 public class InventoryServiceImpl implements InventoryService {
 
   @Inject InventoryRepository inventoryRepository;
+  @Inject NotificationService notificationService;
   @Inject ReservedStockService reservedStockService;
   @Inject InventoryResponseStatusProducer inventoryProducer;
 
@@ -28,13 +30,15 @@ public class InventoryServiceImpl implements InventoryService {
     final Set<String> itemsOutOfStock = getItemsOutOfStock(orderMessage.getItems());
 
     if (!itemsOutOfStock.isEmpty()) {
-      inventoryProducer.doNotification(OrderProcessingStatus.of(orderMessage, OrderStatus.REJECTED_PRODUCT));
+      notificationService.doNotification(
+          OrderProcessingStatus.of(orderMessage, OrderStatus.REJECTED_PRODUCT), inventoryProducer);
       throw new NotFoundException("One or more items out of stock");
     }
 
     makeReserve(orderMessage);
 
-    inventoryProducer.doNotification(OrderProcessingStatus.of(orderMessage, OrderStatus.RESERVED_PRODUCTS));
+    notificationService.doNotification(
+        OrderProcessingStatus.of(orderMessage, OrderStatus.RESERVED_PRODUCTS), inventoryProducer);
   }
 
   private void makeReserve(OrderMessage orderMessage) {
