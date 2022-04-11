@@ -20,6 +20,13 @@ quarkus:
   liquibase:
     migrate-at-start: true
     change-log: "liquibase/changelog.yml"
+  jaeger:
+    enabled: ${QUARKUS_JEAGER_ENABLED:true}
+    service-name: ${quarkus.application.name}-${quarkus.profile}
+    reporter-log-spans: false
+    endpoint: ${QUARKUS_JEAGER_ENDPOINT:http://10.200.0.197:14268/api/traces}
+    sampler-type: const
+    sampler-param: 1
   log:
     console:
       enable: true
@@ -38,6 +45,8 @@ mp:
         topic: sec-inventory
         value:
           deserializer: br.dev.multicode.utils.deserializers.OrderMessageDeserializer
+        interceptor:
+          classes: io.opentracing.contrib.kafka.TracingConsumerInterceptor
     outgoing:
       # Configuring the outgoing channel (writing to Kafka)
       sec-replay:
@@ -45,3 +54,5 @@ mp:
         topic: sec-replay
         value:
           serializer: io.quarkus.kafka.client.serialization.JsonbSerializer
+        interceptor:
+          classes: io.opentracing.contrib.kafka.TracingProducerInterceptor
